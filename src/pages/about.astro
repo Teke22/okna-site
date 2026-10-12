@@ -40,51 +40,48 @@ const description =
 	</main>
 </Layout>
 
-<style>
+<style>	/* All values come from design-system tokens (src/styles/theme.css). */
+
 	main {
-		max-width: 720px;
+		max-width: 45rem;
 		margin: 0 auto;
-		padding: 48px 16px;
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		color: #111827;
-		line-height: 1.6;
+		padding: var(--space-5) var(--space-2);
+		font-family: var(--font);
+		color: var(--color-text);
+		line-height: var(--line-height-base);
 	}
 
 	h1 {
-		font-size: 32px;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-heading);
 		margin: 0 0 0.75em;
 	}
 
 	p {
-		font-size: 16px;
-		color: #374151;
-		letter-spacing: -0.006em;
+		font-size: var(--font-size-base);
+		color: var(--color-muted);
+		letter-spacing: var(--letter-spacing-tight);
 		margin: 0 0 1.25em;
 	}
 
 	a {
-		color: #3245ff;
+		color: var(--color-brand);
 		text-decoration: underline;
 		text-underline-offset: 3px;
 	}
 
 	a:hover {
-		color: #bc52ee;
+		color: var(--color-brand-strong);
 	}
 
 	a:focus-visible {
-		outline: 3px solid #3245ff;
+		outline: 3px solid var(--color-focus);
 		outline-offset: 2px;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 	}
 
-	@media screen and (max-width: 480px) {
+	@media screen and (max-width: 30rem) {
 		main {
-			padding: 24px 12px;
+			padding: var(--space-3) var(--space-1);
 		}
-
-		h1 {
-			font-size: 26px;
-		}
-	}
-</style>
+	}</style>

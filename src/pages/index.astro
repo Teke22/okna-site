@@ -102,24 +102,8 @@ const canonicalUrl =
 	/>
 </Layout>
 
-<style>
-	:root {
-		--color-bg: #ffffff;
-		--color-surface: #f8fafc;
-		--color-text: #111827;
-		--color-muted: #374151;
-		--color-brand: #3245ff;
-		--color-brand-strong: #2334d6;
-		--color-on-brand: #ffffff;
-		--color-border: #e5e7eb;
-		--radius: 0.75rem;
-		--space-1: 0.5rem;
-		--space-2: 1rem;
-		--space-3: 1.5rem;
-		--space-4: 2.5rem;
-		--maxw: 68rem;
-		--font: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-	}
+<style>	/* Theme tokens are defined globally in src/styles/theme.css
+	   (@see AGENTS.md -> kronk-theme-guard). Only token-based rules here. */
 
 	:global(body) {
 		font-family: var(--font);
@@ -129,25 +113,25 @@ const canonicalUrl =
 
 	a:focus-visible,
 	button:focus-visible {
-		outline: 3px solid var(--color-brand);
+		outline: 3px solid var(--color-focus);
 		outline-offset: 2px;
-		border-radius: 0.25rem;
+		border-radius: var(--radius-sm);
 	}
 
 	.skip-link {
 		position: absolute;
-		left: 1rem;
+		left: var(--space-2);
 		top: -3rem;
 		z-index: 10;
 		background: var(--color-brand);
 		color: var(--color-on-brand);
-		padding: 0.5rem 1rem;
-		border-radius: 0.75rem;
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius);
 		text-decoration: none;
 	}
 
 	.skip-link:focus {
-		top: 1rem;
+		top: var(--space-2);
 	}
 
 	.site-header {
@@ -155,19 +139,19 @@ const canonicalUrl =
 	}
 
 	.site-header__inner {
-		max-width: 68rem;
+		max-width: var(--maxw);
 		margin: 0 auto;
-		padding: 1rem;
+		padding: var(--space-2);
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--space-2);
 		align-items: center;
 		justify-content: space-between;
 	}
 
 	.brand {
-		font-size: 1.25rem;
-		font-weight: 700;
+		font-size: var(--font-size-h3);
+		font-weight: var(--font-weight-bold);
 		color: var(--color-text);
 		text-decoration: none;
 	}
@@ -175,7 +159,7 @@ const canonicalUrl =
 	.nav {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--space-2);
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -193,18 +177,18 @@ const canonicalUrl =
 	}
 
 	main {
-		max-width: 68rem;
+		max-width: var(--maxw);
 		margin: 0 auto;
-		padding: 2.5rem 1rem;
+		padding: var(--space-4) var(--space-2);
 	}
 
 	.hero {
-		padding: 2rem 0;
+		padding: var(--space-3) 0;
 	}
 
 	.hero h1 {
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-heading);
 		margin: 0 0 0.5em;
 	}
 
@@ -220,9 +204,9 @@ const canonicalUrl =
 		background: var(--color-brand);
 		color: var(--color-on-brand);
 		text-decoration: none;
-		padding: 0.75rem 1.25rem;
-		border-radius: 0.75rem;
-		font-weight: 600;
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius);
+		font-weight: var(--font-weight-medium);
 	}
 
 	.button:hover {
@@ -230,12 +214,12 @@ const canonicalUrl =
 	}
 
 	.section {
-		margin-top: 2.5rem;
+		margin-top: var(--space-4);
 	}
 
 	.section h2 {
-		font-size: 1.5rem;
-		margin: 0 0 1rem;
+		font-size: var(--font-size-h2);
+		margin: 0 0 var(--space-2);
 	}
 
 	.cards {
@@ -243,20 +227,20 @@ const canonicalUrl =
 		margin: 0;
 		padding: 0;
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-2);
 		grid-template-columns: 1fr;
 	}
 
 	.card {
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius);
+		padding: var(--space-3);
 	}
 
 	.card h3 {
 		margin: 0 0 0.5em;
-		font-size: 1.125rem;
+		font-size: var(--font-size-h3);
 	}
 
 	.card p {
@@ -269,7 +253,7 @@ const canonicalUrl =
 		margin: 0;
 		padding: 0;
 		display: grid;
-		gap: 0.75rem;
+		gap: var(--space-2);
 	}
 
 	.features li {
@@ -292,8 +276,8 @@ const canonicalUrl =
 	.section--contact {
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius);
+		padding: var(--space-3);
 	}
 
 	.section--contact a {
@@ -311,11 +295,11 @@ const canonicalUrl =
 	}
 
 	.site-footer p {
-		max-width: 68rem;
+		max-width: var(--maxw);
 		margin: 0 auto;
-		padding: 1.5rem 1rem;
+		padding: var(--space-3) var(--space-2);
 		color: var(--color-muted);
-		font-size: 0.9375rem;
+		font-size: var(--font-size-sm);
 	}
 
 	@media (min-width: 30rem) {
@@ -326,11 +310,7 @@ const canonicalUrl =
 
 	@media (min-width: 48rem) {
 		.hero {
-			padding: 3rem 0;
-		}
-
-		.hero h1 {
-			font-size: 2.75rem;
+			padding: var(--space-4) 0;
 		}
 
 		.cards {
@@ -350,5 +330,4 @@ const canonicalUrl =
 		.button {
 			transition: background-color 0.2s ease;
 		}
-	}
-</style>
+	}</style>
