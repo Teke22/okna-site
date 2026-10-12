@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// SEO: title 30–60 символов, meta description 120–160 символов
+const title = 'О проекте | Мой сайт — миссия и команда';
+const description =
+	'Узнайте больше о нашем проекте: зачем мы создали этот сайт, какие цели перед собой ставим и какие ценности объединяют нашу команду.';
+---
+
+<Layout title={title} description={description} lang="ru">
+	<main>
+		<article>
+			<h1>О проекте</h1>
+
+			<p>
+				«Мой сайт» — это небольшой проект, созданный для того, чтобы делиться знаниями,
+				идеями и полезными материалами в понятной и доступной форме. Мы верим, что хороший
+				веб-сайт должен быть быстрым, удобным и открытым для каждого посетителя, независимо
+				от устройства и возможностей.
+			</p>
+
+			<p>
+				Сайт появился из желания собрать в одном месте то, что обычно приходится искать по
+				разным источникам. Мы стремимся писать простым языком, проверять факты и регулярно
+				обновлять материалы, чтобы они оставались актуальными. Каждая страница создаётся с
+				заботой о читателе: без лишнего шума, рекламы и запутанной навигации.
+			</p>
+
+			<p>
+				В основе проекта — уважение к людям и внимание к деталям. Мы делаем ставку на
+				доступность, скорость и честность контента. Если вы нашли неточность или хотите
+				предложить тему, будем рады обратной связи — вместе мы сможем сделать сайт ещё
+				лучше.
+			</p>
+
+			<p>
+				<a href={import.meta.env.BASE_URL}>Вернуться на главную страницу</a>
+			</p>
+		</article>
+	</main>
+</Layout>
+
+<style>
+	main {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 48px 16px;
+		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+		color: #111827;
+		line-height: 1.6;
+	}
+
+	h1 {
+		font-size: 32px;
+		margin: 0 0 0.75em;
+	}
+
+	p {
+		font-size: 16px;
+		color: #374151;
+		letter-spacing: -0.006em;
+		margin: 0 0 1.25em;
+	}
+
+	a {
+		color: #3245ff;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	a:hover {
+		color: #bc52ee;
+	}
+
+	a:focus-visible {
+		outline: 3px solid #3245ff;
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	@media screen and (max-width: 480px) {
+		main {
+			padding: 24px 12px;
+		}
+
+		h1 {
+			font-size: 26px;
+		}
+	}
+</style>

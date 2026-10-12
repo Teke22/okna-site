@@ -1,12 +1,52 @@
+---
+export interface Props {
+	title?: string;
+	description?: string;
+	lang?: string;
+	image?: string;
+}
+
+const {
+	title = 'Astro Basics',
+	description = 'Astro Basics — учебный сайт, созданный на фреймворке Astro.',
+	lang = 'en',
+	image = 'favicon.svg',
+} = Astro.props;
+
+// import.meta.env.BASE_URL может не иметь завершающего слэша — нормализуем,
+// иначе пути превращаются в битые вида "/okna-sitefavicon.svg".
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path: string) => base + (path.startsWith('/') ? path.slice(1) : path);
+
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const socialImageURL = new URL(withBase(image), Astro.url);
+---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+		<link rel="icon" href={withBase('favicon.ico')} />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={socialImageURL} />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImageURL} />
 	</head>
 	<body>
 		<slot />
