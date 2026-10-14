@@ -11,6 +11,9 @@ export interface Props {
   primaryHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Optional link to the interactive price calculator. */
+  calculatorHref?: string;
+  calculatorLabel?: string;
   /** Short trust badges rendered under the buttons. */
   badges?: string[];
 }
@@ -24,6 +27,8 @@ const {
   primaryHref = `${base}contacts/#form`,
   secondaryLabel = 'Смотреть услуги',
   secondaryHref = `${base}uslugi/`,
+  calculatorHref,
+  calculatorLabel = 'Рассчитать стоимость',
   badges = [],
 } = Astro.props;
 ---
@@ -37,6 +42,14 @@ const {
 
       <div class="hero__actions">
         <a class="btn btn--primary" href={primaryHref}>{primaryLabel}</a>
+        {
+          calculatorHref && (
+            <a class="btn btn--ghost" href={calculatorHref}>
+              <Icon name="ruble" size={18} />
+              {calculatorLabel}
+            </a>
+          )
+        }
         <a class="btn btn--ghost" href={secondaryHref}>
           {secondaryLabel}
           <Icon name="arrow-right" size={18} />

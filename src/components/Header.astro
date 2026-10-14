@@ -5,7 +5,7 @@ export interface Props {
   /** Normalized BASE_URL (with trailing slash). */
   base: string;
   /** Highlights the current nav item with aria-current="page". */
-  activePage?: 'home' | 'services' | 'about' | 'contacts';
+  activePage?: 'home' | 'services' | 'calculator' | 'about' | 'contacts';
 }
 
 const { base, activePage } = Astro.props;
@@ -13,6 +13,7 @@ const { base, activePage } = Astro.props;
 const nav = [
   { key: 'home', label: 'Главная', href: base },
   { key: 'services', label: 'Услуги', href: `${base}uslugi/` },
+  { key: 'calculator', label: 'Калькулятор', href: `${base}kalkulyator/` },
   { key: 'about', label: 'О компании', href: `${base}about/` },
   { key: 'contacts', label: 'Контакты', href: `${base}contacts/` },
 ] as const;

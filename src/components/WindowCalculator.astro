@@ -1,0 +1,486 @@
+---
+import Icon from './Icon.astro';
+import prices from '../data/prices.json';
+
+const constructionEntries = Object.entries(prices.construction);
+const profileEntries = Object.entries(prices.profiles);
+const glazingEntries = Object.entries(prices.glazing);
+const optionEntries = Object.entries(prices.options);
+const { minSize, maxSize } = prices.limits;
+---
+
+<div class="calculator" data-window-calculator-root>
+	<form class="calculator__form" data-window-calculator novalidate aria-label="Калькулятор стоимости окна">
+		<fieldset class="fieldset">
+			<legend class="legend">Тип конструкции</legend>
+			<div class="choice-grid">
+				{
+					constructionEntries.map(([key, item], index) => (
+						<label class="choice">
+							<input
+								type="radio"
+								name="construction"
+								value={key}
+								checked={index === 0}
+								required
+							/>
+							<span class="choice__label">{item.label}</span>
+						</label>
+					))
+				}
+			</div>
+		</fieldset>
+
+		<div class="row">
+			<div class="field">
+				<label for="calc-width">Ширина, мм</label>
+				<input
+					type="number"
+					id="calc-width"
+					name="width"
+					min={minSize}
+					max={maxSize}
+					step="10"
+					inputmode="numeric"
+					placeholder="например, 1300"
+					required
+					aria-describedby="calc-width-hint calc-width-error"
+				/>
+				<p class="hint" id="calc-width-hint">От {minSize} до {maxSize} мм</p>
+				<p class="error" id="calc-width-error" data-error-for="width"></p>
+			</div>
+
+			<div class="field">
+				<label for="calc-height">Высота, мм</label>
+				<input
+					type="number"
+					id="calc-height"
+					name="height"
+					min={minSize}
+					max={maxSize}
+					step="10"
+					inputmode="numeric"
+					placeholder="например, 1400"
+					required
+					aria-describedby="calc-height-hint calc-height-error"
+				/>
+				<p class="hint" id="calc-height-hint">От {minSize} до {maxSize} мм</p>
+				<p class="error" id="calc-height-error" data-error-for="height"></p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="field">
+				<label for="calc-profile">Тип профиля</label>
+				<select id="calc-profile" name="profile" required>
+					{profileEntries.map(([key, item]) => <option value={key}>{item.label}</option>)}
+				</select>
+			</div>
+
+			<div class="field">
+				<label for="calc-glazing">Тип стеклопакета</label>
+				<select id="calc-glazing" name="glazing" required>
+					{glazingEntries.map(([key, item]) => <option value={key}>{item.label}</option>)}
+				</select>
+			</div>
+		</div>
+
+		<fieldset class="fieldset">
+			<legend class="legend">Дополнительные опции</legend>
+			<div class="choice-grid">
+				{
+					optionEntries.map(([key, item]) => (
+						<label class="choice">
+							<input type="checkbox" name={`option-${key}`} value={key} data-option={key} />
+							<span class="choice__label">{item.label}</span>
+						</label>
+					))
+				}
+			</div>
+		</fieldset>
+
+		<button class="button" type="submit">
+			<Icon name="ruble" size={18} />
+			Рассчитать стоимость
+		</button>
+	</form>
+
+	<section class="result" aria-live="polite" aria-atomic="true" data-window-result>
+		<h2 class="result__title">Предварительная стоимость</h2>
+
+		<p class="result__empty" data-result-empty>
+			Заполните параметры — расчёт обновится автоматически.
+		</p>
+
+		<div class="result__body" data-result-body hidden>
+			<p class="result__total" data-result-total>0 ₽</p>
+			<p class="result__area">
+				Площадь конструкции: <span data-result-area>0,00 м²</span>
+			</p>
+
+			<ul class="result__list" data-result-breakdown></ul>
+
+			<p class="result__note">
+				Расчёт предварительный. Точную стоимость подтвердим после бесплатного замера.
+			</p>
+			<a class="result__cta" href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}contacts/#form`}>
+				Заказать замер
+			</a>
+		</div>
+	</section>
+</div>
+
+<style>
+	.calculator {
+		display: grid;
+		gap: var(--space-4);
+		grid-template-columns: 1fr;
+		align-items: start;
+	}
+
+	.calculator__form {
+		display: grid;
+		gap: var(--space-3);
+	}
+
+	.fieldset {
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		margin: 0;
+		padding: var(--space-3);
+	}
+
+	.legend {
+		padding: 0 var(--space-1);
+		font-weight: var(--font-weight-bold);
+		color: var(--color-text);
+	}
+
+	.row {
+		display: grid;
+		gap: var(--space-3);
+		grid-template-columns: 1fr;
+	}
+
+	.field {
+		display: grid;
+		gap: var(--space-1);
+	}
+
+	.field label {
+		font-weight: var(--font-weight-medium);
+		color: var(--color-text);
+	}
+
+	.field input,
+	.field select {
+		box-sizing: border-box;
+		width: 100%;
+		font-family: var(--font);
+		font-size: var(--font-size-base);
+		color: var(--color-text);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		padding: var(--space-2);
+	}
+
+	.hint {
+		margin: 0;
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.error {
+		margin: 0;
+		min-height: 1em;
+		font-size: var(--font-size-sm);
+		color: var(--color-brand-strong);
+	}
+
+	.field input[aria-invalid='true'] {
+		border-color: var(--color-brand-strong);
+	}
+
+	.choice-grid {
+		display: grid;
+		gap: var(--space-1);
+		grid-template-columns: 1fr;
+	}
+
+	.choice {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		padding: var(--space-1);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+	}
+
+	.choice:hover {
+		background: var(--color-surface);
+	}
+
+	.choice input {
+		width: 1.1rem;
+		height: 1.1rem;
+		accent-color: var(--color-brand);
+	}
+
+	.choice__label {
+		color: var(--color-text);
+	}
+
+	.button {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		justify-self: start;
+		font-family: var(--font);
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-medium);
+		color: var(--color-on-brand);
+		background: var(--color-brand);
+		border: 1px solid transparent;
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius);
+		cursor: pointer;
+	}
+
+	.button:hover {
+		background: var(--color-brand-strong);
+	}
+
+	.result {
+		padding: var(--space-3);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-md);
+	}
+
+	.result__title {
+		margin: 0 0 var(--space-2);
+		font-size: var(--font-size-h3);
+	}
+
+	.result__empty {
+		margin: 0;
+		color: var(--color-muted);
+	}
+
+	.result__total {
+		margin: 0;
+		font-size: var(--font-size-h1);
+		font-weight: var(--font-weight-bold);
+		line-height: var(--line-height-heading);
+		color: var(--color-brand);
+	}
+
+	.result__area {
+		margin: var(--space-1) 0 var(--space-2);
+		color: var(--color-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	.result__list {
+		list-style: none;
+		margin: 0 0 var(--space-2);
+		padding: var(--space-2) 0 0;
+		border-top: 1px solid var(--color-border);
+		display: grid;
+		gap: var(--space-1);
+	}
+
+	.result__list :global(.result__line) {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--space-2);
+		color: var(--color-muted);
+	}
+
+	.result__list :global(.result__amount) {
+		color: var(--color-text);
+		font-weight: var(--font-weight-medium);
+		white-space: nowrap;
+	}
+
+	.result__note {
+		margin: 0 0 var(--space-2);
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+	}
+
+	.result__cta {
+		display: inline-block;
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius);
+		background: var(--color-brand);
+		color: var(--color-on-brand);
+		font-weight: var(--font-weight-medium);
+		text-decoration: none;
+	}
+
+	.result__cta:hover {
+		background: var(--color-brand-strong);
+	}
+
+	:global(input:focus-visible),
+	:global(select:focus-visible),
+	:global(button:focus-visible),
+	:global(a:focus-visible) {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
+	.field input:focus-visible,
+	.field select:focus-visible {
+		border-color: var(--color-brand);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.button,
+		.result__cta {
+			transition: background-color var(--transition-fast);
+		}
+	}
+
+	@media (min-width: 34rem) {
+		.row {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.choice-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 52rem) {
+		.calculator {
+			grid-template-columns: 1.3fr 1fr;
+		}
+
+		.result {
+			position: sticky;
+			top: var(--header-height);
+		}
+	}
+</style>
+
+<script>
+	import prices from '../data/prices.json';
+	import { calculateCost, validateInput, formatMoney, formatArea } from '../scripts/calculator.js';
+
+	const form = document.querySelector<HTMLFormElement>('[data-window-calculator]');
+
+	if (form) {
+		const result = document.querySelector<HTMLElement>('[data-window-result]');
+		const totalEl = result?.querySelector<HTMLElement>('[data-result-total]');
+		const areaEl = result?.querySelector<HTMLElement>('[data-result-area]');
+		const listEl = result?.querySelector<HTMLUListElement>('[data-result-breakdown]');
+		const bodyEl = result?.querySelector<HTMLElement>('[data-result-body]');
+		const emptyEl = result?.querySelector<HTMLElement>('[data-result-empty]');
+
+		const errorEls = new Map<string, HTMLElement>();
+		form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => {
+			const key = el.getAttribute('data-error-for');
+			if (key) errorEls.set(key, el);
+		});
+
+		const getField = (name: string) =>
+			form.querySelector<HTMLInputElement | HTMLSelectElement>(`[name="${name}"]`);
+
+		const readParams = () => {
+			const construction = form.querySelector<HTMLInputElement>(
+				'input[name="construction"]:checked',
+			);
+			const options: Record<string, boolean> = {};
+
+			form
+				.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-option]')
+				.forEach((checkbox) => {
+					const key = checkbox.getAttribute('data-option');
+					if (key) options[key] = checkbox.checked;
+				});
+
+			return {
+				width: getField('width')?.value ?? '',
+				height: getField('height')?.value ?? '',
+				construction: construction?.value ?? '',
+				profile: getField('profile')?.value ?? '',
+				glazing: getField('glazing')?.value ?? '',
+				options,
+			};
+		};
+
+		const clearErrors = () => {
+			errorEls.forEach((el) => {
+				el.textContent = '';
+			});
+			form.querySelectorAll('[aria-invalid="true"]').forEach((el) => {
+				el.removeAttribute('aria-invalid');
+			});
+		};
+
+		const renderErrors = (errors: Record<string, string>) => {
+			clearErrors();
+			Object.entries(errors).forEach(([field, message]) => {
+				const errorEl = errorEls.get(field);
+				if (errorEl) errorEl.textContent = message;
+				getField(field)?.setAttribute('aria-invalid', 'true');
+			});
+		};
+
+		const showEmpty = () => {
+			if (bodyEl) bodyEl.hidden = true;
+			if (emptyEl) emptyEl.hidden = false;
+		};
+
+		const renderResult = (data: ReturnType<typeof calculateCost>) => {
+			if (totalEl) totalEl.textContent = formatMoney(data.total);
+			if (areaEl) areaEl.textContent = formatArea(data.area);
+
+			if (listEl) {
+				listEl.textContent = '';
+				data.lines.forEach((line) => {
+					const item = document.createElement('li');
+					item.className = 'result__line';
+
+					const label = document.createElement('span');
+					label.textContent = line.label;
+
+					const amount = document.createElement('span');
+					amount.className = 'result__amount';
+					amount.textContent = formatMoney(line.amount);
+
+					item.append(label, amount);
+					listEl.append(item);
+				});
+			}
+
+			if (emptyEl) emptyEl.hidden = true;
+			if (bodyEl) bodyEl.hidden = false;
+		};
+
+		const update = () => {
+			const params = readParams();
+			const { valid, errors } = validateInput(params, prices);
+			renderErrors(errors);
+
+			if (!valid) {
+				showEmpty();
+				return;
+			}
+
+			renderResult(calculateCost(params, prices));
+		};
+
+		form.addEventListener('input', update);
+		form.addEventListener('change', update);
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			update();
+		});
+	}
+</script>
