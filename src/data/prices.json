@@ -1,34 +1,36 @@
 {
-  "currency": "RUB",
+  "currency": "MDL",
+  "note": "Ориентировочные цены в молдавских леях (MDL). Не является публичной офертой.",
+  "exchangeRate": { "RUB_MDL": 0.212, "updated": "2026-10-14" },
   "limits": {
     "minSize": 300,
     "maxSize": 3000
   },
   "construction": {
     "single": { "label": "Одностворчатое", "sashes": 1, "base": 0 },
-    "double": { "label": "Двухстворчатое", "sashes": 2, "base": 1800 },
-    "triple": { "label": "Трёхстворчатое", "sashes": 3, "base": 3600 },
-    "balcony": { "label": "Балконный блок", "sashes": 3, "base": 7200 }
+    "double": { "label": "Двухстворчатое", "sashes": 2, "base": 380 },
+    "triple": { "label": "Трёхстворчатое", "sashes": 3, "base": 760 },
+    "balcony": { "label": "Балконный блок", "sashes": 3, "base": 1500 }
   },
   "profiles": {
-    "economy": { "label": "Эконом", "pricePerM2": 8000 },
-    "standard": { "label": "Стандарт", "pricePerM2": 11000 },
-    "premium": { "label": "Премиум", "pricePerM2": 15000 }
+    "economy": { "label": "Эконом", "pricePerM2": 1700 },
+    "standard": { "label": "Стандарт", "pricePerM2": 2300 },
+    "premium": { "label": "Премиум", "pricePerM2": 3200 }
   },
   "glazing": {
-    "single": { "label": "Однокамерный", "pricePerM2": 1800 },
-    "double": { "label": "Двухкамерный", "pricePerM2": 2900 },
-    "doubleEnergy": { "label": "Двухкамерный энергосберегающий", "pricePerM2": 4200 }
+    "single": { "label": "Однокамерный", "pricePerM2": 380 },
+    "double": { "label": "Двухкамерный", "pricePerM2": 620 },
+    "doubleEnergy": { "label": "Двухкамерный энергосберегающий", "pricePerM2": 890 }
   },
   "furniture": {
-    "pricePerSash": 3200,
-    "pricePerM2": 950
+    "pricePerSash": 680,
+    "pricePerM2": 200
   },
   "options": {
-    "mosquito": { "label": "Москитная сетка", "price": 2500, "type": "fixed" },
-    "sill": { "label": "Подоконник", "price": 1500, "type": "perMeter" },
-    "drip": { "label": "Отлив", "price": 1100, "type": "perMeter" },
-    "installation": { "label": "Установка", "price": 2600, "type": "perM2" },
-    "dismantling": { "label": "Демонтаж", "price": 1600, "type": "fixed" }
+    "mosquito": { "label": "Москитная сетка", "price": 530, "type": "fixed" },
+    "sill": { "label": "Подоконник", "price": 320, "type": "perMeter" },
+    "drip": { "label": "Отлив", "price": 230, "type": "perMeter" },
+    "installation": { "label": "Установка", "price": 550, "type": "perM2" },
+    "dismantling": { "label": "Демонтаж", "price": 340, "type": "fixed" }
   }
 }

@@ -10,7 +10,7 @@
 /** Option keys that are grouped into the "Дополнительные опции" line. */
 const INSTALLATION_KEY = 'installation';
 
-/** Round a number to the nearest `step` (default 10 ₽) for realistic pricing. */
+/** Round a number to the nearest `step` (default 10 lei) for realistic pricing. */
 export function roundTo(value, step = 10) {
   if (!Number.isFinite(value)) return 0;
   return Math.round(value / step) * step;
@@ -134,13 +134,12 @@ export function calculateCost(params, config) {
   return { area, widthM, lines, optionDetails, total };
 }
 
-/** Format a number as Russian rubles, e.g. `12 345 ₽`. */
+/** Format a number as Moldovan lei, e.g. `5 300 lei`. */
 export function formatMoney(value) {
-  return new Intl.NumberFormat('ru-RU', {
-    style: 'currency',
-    currency: 'RUB',
-    maximumFractionDigits: 0,
-  }).format(Number(value) || 0);
+  const number = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(
+    Number(value) || 0,
+  );
+  return `${number} lei`;
 }
 
 /** Format an area in square meters, e.g. `1,44 м²`. */
