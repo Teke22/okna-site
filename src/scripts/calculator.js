@@ -67,6 +67,9 @@ export function validateInput(params, config) {
   if (!config.glazing[params.glazing]) {
     errors.glazing = 'Выберите тип стеклопакета.';
   }
+  if (!config.hardware[params.hardware]) {
+    errors.hardware = 'Выберите тип фурнитуры.';
+  }
 
   return { valid: Object.keys(errors).length === 0, errors };
 }
@@ -74,7 +77,7 @@ export function validateInput(params, config) {
 /**
  * Calculate the preliminary cost and its breakdown.
  *
- * @param {object} params  Form values (width, height, construction, profile, glazing, options).
+ * @param {object} params  Form values (width, height, construction, profile, glazing, hardware, options).
  * @param {object} config  Parsed prices.json.
  * @returns {{
  *   area: number,
@@ -94,13 +97,11 @@ export function calculateCost(params, config) {
   const construction = config.construction[params.construction] ?? { sashes: 1, base: 0 };
   const profile = config.profiles[params.profile] ?? { pricePerM2: 0 };
   const glazing = config.glazing[params.glazing] ?? { pricePerM2: 0 };
+  const hardware = config.hardware[params.hardware] ?? { pricePerSash: 0 };
 
   const profileCost = profile.pricePerM2 * area;
   const glazingCost = glazing.pricePerM2 * area;
-  const furnitureCost =
-    construction.base +
-    config.furniture.pricePerM2 * area +
-    construction.sashes * config.furniture.pricePerSash;
+  const hardwareCost = construction.base + construction.sashes * hardware.pricePerSash;
 
   const selected = params.options ?? {};
   let optionsCost = 0;
@@ -123,8 +124,8 @@ export function calculateCost(params, config) {
 
   const lines = [
     { key: 'profile', label: 'Профильная система', amount: roundTo(profileCost) },
+    { key: 'hardware', label: 'Фурнитура', amount: roundTo(hardwareCost) },
     { key: 'glazing', label: 'Стеклопакет', amount: roundTo(glazingCost) },
-    { key: 'furniture', label: 'Фурнитура и комплектующие', amount: roundTo(furnitureCost) },
     { key: 'options', label: 'Дополнительные опции', amount: roundTo(optionsCost) },
     { key: 'installation', label: 'Монтаж', amount: roundTo(installationCost) },
   ];

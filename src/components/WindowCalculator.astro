@@ -5,6 +5,7 @@ import prices from '../data/prices.json';
 const constructionEntries = Object.entries(prices.construction);
 const profileEntries = Object.entries(prices.profiles);
 const glazingEntries = Object.entries(prices.glazing);
+const hardwareEntries = Object.entries(prices.hardware);
 const optionEntries = Object.entries(prices.options);
 const { minSize, maxSize } = prices.limits;
 ---
@@ -81,6 +82,15 @@ const { minSize, maxSize } = prices.limits;
 				<label for="calc-glazing">Тип стеклопакета</label>
 				<select id="calc-glazing" name="glazing" required>
 					{glazingEntries.map(([key, item]) => <option value={key}>{item.label}</option>)}
+				</select>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="field">
+				<label for="calc-hardware">Фурнитура</label>
+				<select id="calc-hardware" name="hardware" required>
+					{hardwareEntries.map(([key, item]) => <option value={key}>{item.label}</option>)}
 				</select>
 			</div>
 		</div>
@@ -410,6 +420,7 @@ const { minSize, maxSize } = prices.limits;
 				construction: construction?.value ?? '',
 				profile: getField('profile')?.value ?? '',
 				glazing: getField('glazing')?.value ?? '',
+				hardware: getField('hardware')?.value ?? '',
 				options,
 			};
 		};
