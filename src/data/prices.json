@@ -1,7 +1,6 @@
 {
   "currency": "MDL",
   "note": "Ориентировочные цены в молдавских леях (MDL). Не является публичной офертой.",
-  "exchangeRate": { "RUB_MDL": 0.212, "updated": "2026-10-14" },
   "limits": {
     "minSize": 300,
     "maxSize": 3000
