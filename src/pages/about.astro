@@ -1,87 +1,234 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Icon from '../components/Icon.astro';
 
-// SEO: title 30–60 символов, meta description 120–160 символов
-const title = 'О проекте | Мой сайт — миссия и команда';
+// SEO: title 30–60 символов, description 120–160 символов
+const title = 'О компании «Окна-Сервис» — опыт и производство с 2010 года';
 const description =
-	'Узнайте больше о нашем проекте: зачем мы создали этот сайт, какие цели перед собой ставим и какие ценности объединяют нашу команду.';
+  'Окна-Сервис работает с 2010 года: более 5000 установленных окон, собственное производство и гарантия 5 лет на изделия и монтаж.';
+
+// Нормализуем BASE_URL для корректных абсолютных путей
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+
+const canonicalUrl =
+  Astro.site != null ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+
+const stats = [
+  { value: 'с 2010', label: 'года на рынке' },
+  { value: '5 000+', label: 'установленных окон' },
+  { value: '5 лет', label: 'гарантия по договору' },
+  { value: '15+', label: 'лет опыта команды' },
+];
+
+const values = [
+  {
+    icon: 'factory',
+    title: 'Собственное производство',
+    text: 'Мы изготавливаем окна на своей площадке — это позволяет контролировать качество и держать честные цены без наценок посредников.',
+  },
+  {
+    icon: 'award',
+    title: 'Гарантия и ответственность',
+    text: 'На изделия и монтаж действует гарантия 5 лет. Все условия фиксируем в договоре, а сервисные обращения отрабатываем в течение 1–2 дней.',
+  },
+  {
+    icon: 'users',
+    title: 'Штатные специалисты',
+    text: 'Замерщики и монтажные бригады работают в компании постоянно, поэтому отвечают за результат и соблюдают сроки.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Окна-Сервис',
+  description,
+  url: canonicalUrl,
+  foundingDate: '2010',
+  telephone: '+78001234567',
+  email: 'zakaz@okna-service.example',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Примерная, д. 1',
+    addressLocality: 'Москва',
+    addressCountry: 'RU',
+  },
+};
 ---
 
-<Layout title={title} description={description} lang="ru">
-	<main>
-		<article>
-			<h1>О проекте</h1>
-
-			<p>
-				«Мой сайт» — это небольшой проект, созданный для того, чтобы делиться знаниями,
-				идеями и полезными материалами в понятной и доступной форме. Мы верим, что хороший
-				веб-сайт должен быть быстрым, удобным и открытым для каждого посетителя, независимо
-				от устройства и возможностей.
+<Layout title={title} description={description} lang="ru" activePage="about">
+	<main id="main-content">
+		<section class="hero-block wrap">
+			<h1>О компании</h1>
+			<p class="lead">
+				«Окна-Сервис» — производитель и установщик пластиковых окон. С 2010 года мы
+				остекляем квартиры, балконы и частные дома, помогая сделать жильё тише, теплее и
+				уютнее.
+			</p>
+			<p class="lead">
+				За это время мы установили более 5000 окон и собрали команду из замерщиков и
+				монтажников, которые работают у нас постоянно. Нам важно, чтобы каждый клиент получил
+				понятную цену, аккуратный монтаж и реальную гарантию.
 			</p>
 
-			<p>
-				Сайт появился из желания собрать в одном месте то, что обычно приходится искать по
-				разным источникам. Мы стремимся писать простым языком, проверять факты и регулярно
-				обновлять материалы, чтобы они оставались актуальными. Каждая страница создаётся с
-				заботой о читателе: без лишнего шума, рекламы и запутанной навигации.
-			</p>
+			<ul class="stats">
+				{
+					stats.map((stat) => (
+						<li class="stat">
+							<span class="stat__value">{stat.value}</span>
+							<span class="stat__label">{stat.label}</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
 
+		<section class="section wrap" aria-labelledby="production-title">
+			<h2 id="production-title">Производство и подход к работе</h2>
 			<p>
-				В основе проекта — уважение к людям и внимание к деталям. Мы делаем ставку на
-				доступность, скорость и честность контента. Если вы нашли неточность или хотите
-				предложить тему, будем рады обратной связи — вместе мы сможем сделать сайт ещё
-				лучше.
+				Мы используем проверенные профильные системы и энергоэффективные стеклопакеты,
+				подбирая решение под конкретный дом: тип окон, этаж, уровень шума и бюджет.
 			</p>
+			<p>
+				Работа построена прозрачно: сначала бесплатный замер и расчёт, затем договор с
+				фиксированной сметой, изготовление и монтаж в удобное для вас время.
+			</p>
+		</section>
 
+		<section class="section wrap" aria-labelledby="values-title">
+			<h2 id="values-title">Почему нам доверяют</h2>
+			<ul class="values">
+				{
+					values.map((item) => (
+						<li class="value">
+							<span class="value__icon">
+								<Icon name={item.icon} size={24} />
+							</span>
+							<h3 class="value__title">{item.title}</h3>
+							<p class="value__text">{item.text}</p>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<section class="section wrap" aria-labelledby="guarantee-title">
+			<h2 id="guarantee-title">Гарантии</h2>
 			<p>
-				<a href={import.meta.env.BASE_URL}>Вернуться на главную страницу</a>
+				На все изделия и монтажные работы предоставляется гарантия 5 лет. В течение
+				гарантийного срока мы бесплатно регулируем створки, меняем фурнитуру и уплотнители,
+				если они вышли из строя по нашей вине.
 			</p>
-		</article>
+		</section>
+
+		<CtaSection base={base} />
 	</main>
+
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </Layout>
 
-<style>	/* All values come from design-system tokens (src/styles/theme.css). */
-
-	main {
-		max-width: 45rem;
+<style>
+	.wrap {
+		max-width: var(--maxw-narrow);
 		margin: 0 auto;
-		padding: var(--space-5) var(--space-2);
-		font-family: var(--font);
-		color: var(--color-text);
-		line-height: var(--line-height-base);
+		padding: 0 var(--space-2);
+	}
+
+	.hero-block {
+		padding-top: var(--space-5);
 	}
 
 	h1 {
+		margin: 0 0 var(--space-2);
 		font-size: var(--font-size-h1);
 		line-height: var(--line-height-heading);
-		margin: 0 0 0.75em;
+		letter-spacing: var(--letter-spacing-tight);
+	}
+
+	h2 {
+		margin: 0 0 var(--space-2);
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-heading);
 	}
 
 	p {
-		font-size: var(--font-size-base);
+		margin: 0 0 var(--space-2);
 		color: var(--color-muted);
 		letter-spacing: var(--letter-spacing-tight);
-		margin: 0 0 1.25em;
 	}
 
-	a {
+	.lead {
+		font-size: var(--font-size-lead);
+	}
+
+	.section {
+		margin-top: var(--space-5);
+	}
+
+	.stats {
+		list-style: none;
+		margin: var(--space-4) 0 0;
+		padding: 0;
+		display: grid;
+		gap: var(--space-2);
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.stat {
+		display: grid;
+		gap: 0.25rem;
+		padding: var(--space-2);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		background: var(--color-surface);
+	}
+
+	.stat__value {
+		font-size: var(--font-size-h2);
+		font-weight: var(--font-weight-bold);
 		color: var(--color-brand);
-		text-decoration: underline;
-		text-underline-offset: 3px;
+		line-height: 1;
 	}
 
-	a:hover {
-		color: var(--color-brand-strong);
+	.stat__label {
+		color: var(--color-muted);
+		font-size: var(--font-size-sm);
 	}
 
-	a:focus-visible {
-		outline: 3px solid var(--color-focus);
-		outline-offset: 2px;
-		border-radius: var(--radius-sm);
+	.values {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: var(--space-3);
 	}
 
-	@media screen and (max-width: 30rem) {
-		main {
-			padding: var(--space-3) var(--space-1);
+	.value__icon {
+		display: grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		margin-bottom: var(--space-1);
+		border-radius: var(--radius);
+		background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+		color: var(--color-accent);
+	}
+
+	.value__title {
+		margin: 0 0 0.25em;
+		font-size: var(--font-size-h3);
+	}
+
+	.value__text {
+		margin: 0;
+		color: var(--color-muted);
+	}
+
+	@media (min-width: 48rem) {
+		.stats {
+			grid-template-columns: repeat(4, 1fr);
 		}
-	}</style>
+	}
+</style>

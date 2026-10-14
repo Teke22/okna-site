@@ -21,7 +21,7 @@ Framework: **Astro** | Content dir: `src/pages/`
 ```yaml
 ---
 title: "30-60 chars"
-date: 2026-10-12
+date: 2026-10-14
 description: "120-160 chars for SEO"
 draft: false
 ---

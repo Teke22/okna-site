@@ -1,0 +1,142 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  /** Normalized BASE_URL (with trailing slash). */
+  base: string;
+  /** Highlights the current nav item with aria-current="page". */
+  activePage?: 'home' | 'services' | 'about' | 'contacts';
+}
+
+const { base, activePage } = Astro.props;
+
+const nav = [
+  { key: 'home', label: 'Главная', href: base },
+  { key: 'services', label: 'Услуги', href: `${base}uslugi/` },
+  { key: 'about', label: 'О компании', href: `${base}about/` },
+  { key: 'contacts', label: 'Контакты', href: `${base}contacts/` },
+] as const;
+
+const ctaHref = `${base}contacts/#form`;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href={base} aria-label="Окна-Сервис — на главную страницу">
+      <span class="brand__mark"><Icon name="window" size={22} /></span>
+      <span class="brand__name">Окна-Сервис</span>
+    </a>
+
+    <nav aria-label="Основная навигация">
+      <ul class="nav">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={activePage === item.key ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="cta" href={ctaHref}>Заказать замер</a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: var(--space-2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  .brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius);
+    background: var(--gradient-brand);
+    color: var(--color-on-brand);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav a {
+    color: var(--color-muted);
+    text-decoration: none;
+    padding: var(--space-1) 0;
+  }
+
+  .nav a:hover {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .nav a[aria-current='page'] {
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .cta {
+    display: inline-block;
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+  }
+
+  .cta:hover {
+    background: var(--color-brand-strong);
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cta {
+      transition: background-color var(--transition-fast);
+    }
+  }
+</style>

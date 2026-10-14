@@ -1,0 +1,128 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  /** Normalized BASE_URL (with trailing slash). */
+  base: string;
+  title?: string;
+  text?: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  phoneDisplay?: string;
+  phoneHref?: string;
+}
+
+const {
+  base,
+  title = 'Оставьте заявку на бесплатный замер',
+  text = 'Приедем в удобное время, сделаем точные замеры и рассчитаем стоимость без обязательств. Консультация и выезд мастера — бесплатно.',
+  primaryLabel = 'Заказать замер',
+  primaryHref = `${base}contacts/#form`,
+  phoneDisplay = '+7 (800) 123-45-67',
+  phoneHref = 'tel:+78001234567',
+} = Astro.props;
+---
+
+<section class="cta" aria-labelledby="cta-title">
+  <div class="cta__inner">
+    <div class="cta__text">
+      <h2 class="cta__title" id="cta-title">{title}</h2>
+      <p class="cta__lead">{text}</p>
+    </div>
+    <div class="cta__actions">
+      <a class="cta__btn" href={primaryHref}>{primaryLabel}</a>
+      <a class="cta__phone" href={phoneHref}>
+        <Icon name="phone" size={18} />
+        {phoneDisplay}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    margin-top: var(--space-5);
+  }
+
+  .cta__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-3);
+    border-radius: var(--radius-lg);
+    background: var(--gradient-brand);
+    color: var(--color-on-brand);
+    box-shadow: var(--shadow-lg);
+    display: grid;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .cta__title {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-heading);
+  }
+
+  .cta__lead {
+    margin: 0;
+    max-width: 42rem;
+    opacity: 0.92;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .cta__btn {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius);
+    background: var(--color-on-brand);
+    color: var(--color-brand-strong);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+  }
+
+  .cta__btn:hover {
+    background: var(--color-surface);
+  }
+
+  .cta__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--color-on-brand) 55%, transparent);
+    color: var(--color-on-brand);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+  }
+
+  .cta__phone:hover {
+    border-color: var(--color-on-brand);
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-on-brand);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cta__btn,
+    .cta__phone {
+      transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .cta__inner {
+      grid-template-columns: 1.4fr auto;
+      padding: var(--space-4);
+    }
+  }
+</style>

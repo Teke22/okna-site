@@ -1,0 +1,216 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  /** Normalized BASE_URL (with trailing slash). */
+  base: string;
+  eyebrow?: string;
+  title: string;
+  subtitle: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  /** Short trust badges rendered under the buttons. */
+  badges?: string[];
+}
+
+const {
+  base,
+  eyebrow = 'Окна ПВХ от производителя',
+  title,
+  subtitle,
+  primaryLabel = 'Заказать замер',
+  primaryHref = `${base}contacts/#form`,
+  secondaryLabel = 'Смотреть услуги',
+  secondaryHref = `${base}uslugi/`,
+  badges = [],
+} = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__text">
+      {eyebrow && <p class="hero__eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      <p class="hero__lead">{subtitle}</p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={primaryHref}>{primaryLabel}</a>
+        <a class="btn btn--ghost" href={secondaryHref}>
+          {secondaryLabel}
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+
+      {
+        badges.length > 0 && (
+          <ul class="hero__badges">
+            {badges.map((badge) => (
+              <li>
+                <Icon name="check" size={16} />
+                {badge}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class="hero__visual">
+      <svg
+        class="hero__art"
+        viewBox="0 0 260 220"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linejoin="round"
+        role="img"
+        aria-label="Иллюстрация пластикового окна"
+      >
+        <rect x="18" y="14" width="224" height="192" rx="14"></rect>
+        <path d="M130 14v192M18 110h224"></path>
+        <path d="M130 110l112 96" opacity="0.35"></path>
+        <path d="M130 110L18 206" opacity="0.35"></path>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--gradient-soft);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-2);
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+
+  .hero__eyebrow {
+    display: inline-block;
+    margin: 0 0 var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--color-brand) 12%, transparent);
+    color: var(--color-brand-strong);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  h1 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-h1);
+    line-height: var(--line-height-heading);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  .hero__lead {
+    margin: 0 0 var(--space-3);
+    max-width: 40rem;
+    font-size: var(--font-size-lead);
+    color: var(--color-muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+
+  .btn--primary {
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn--primary:hover {
+    background: var(--color-brand-strong);
+  }
+
+  .btn--ghost {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+
+  .btn--ghost:hover {
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+  }
+
+  .hero__badges {
+    list-style: none;
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .hero__badges li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .hero__badges li :global(svg) {
+    color: var(--color-accent);
+  }
+
+  .hero__visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+    background: var(--gradient-brand);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-on-brand);
+  }
+
+  .hero__art {
+    width: 100%;
+    max-width: 20rem;
+    height: auto;
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn {
+      transition: background-color var(--transition-fast), border-color var(--transition-fast),
+        color var(--transition-fast);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .hero__inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      padding: var(--space-5) var(--space-2);
+    }
+  }
+</style>

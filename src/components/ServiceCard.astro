@@ -1,0 +1,98 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  /** Icon key from Icon.astro. */
+  icon: string;
+  title: string;
+  description: string;
+  /** Optional call-to-action link rendered at the bottom of the card. */
+  href?: string;
+  linkLabel?: string;
+}
+
+const { icon, title, description, href, linkLabel = 'Подробнее' } = Astro.props;
+---
+
+<article class="card">
+  <span class="card__icon"><Icon name={icon} size={26} /></span>
+  <h3 class="card__title">{title}</h3>
+  <p class="card__text">{description}</p>
+  {
+    href && (
+      <a class="card__link" href={href}>
+        {linkLabel}
+        <Icon name="arrow-right" size={16} />
+      </a>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+    padding: var(--space-3);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+  }
+
+  .card__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--space-1);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--color-brand) 12%, transparent);
+    color: var(--color-brand);
+  }
+
+  .card__title {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .card__text {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .card__link {
+    margin-top: var(--space-1);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-brand);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+  }
+
+  .card__link:hover {
+    color: var(--color-brand-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      transition: box-shadow var(--transition-base), transform var(--transition-base);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+  }
+</style>

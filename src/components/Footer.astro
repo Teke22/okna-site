@@ -1,0 +1,170 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  /** Normalized BASE_URL (with trailing slash). */
+  base: string;
+}
+
+const { base } = Astro.props;
+
+const year = new Date().getFullYear();
+
+const nav = [
+  { label: 'Главная', href: base },
+  { label: 'Услуги', href: `${base}uslugi/` },
+  { label: 'О компании', href: `${base}about/` },
+  { label: 'Контакты', href: `${base}contacts/` },
+];
+
+const phoneDisplay = '+7 (800) 123-45-67';
+const phoneHref = 'tel:+78001234567';
+const email = 'zakaz@okna-service.example';
+const address = 'г. Москва, ул. Примерная, д. 1';
+const hours = 'Пн–Сб: 9:00–20:00';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="footer-col">
+      <p class="footer-brand">
+        <span class="footer-brand__mark"><Icon name="window" size={20} /></span>
+        Окна-Сервис
+      </p>
+      <p class="footer-tagline">
+        Производство и установка пластиковых окон под ключ с гарантией 5 лет.
+      </p>
+    </div>
+
+    <nav class="footer-col" aria-label="Навигация в подвале">
+      <h2 class="footer-heading">Компания</h2>
+      <ul class="footer-list">
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="footer-col">
+      <h2 class="footer-heading">Контакты</h2>
+      <ul class="footer-list footer-list--contact">
+        <li>
+          <a href={phoneHref}><Icon name="phone" size={18} />{phoneDisplay}</a>
+        </li>
+        <li>
+          <a href={`mailto:${email}`}><Icon name="mail" size={18} />{email}</a>
+        </li>
+        <li>
+          <span><Icon name="map-pin" size={18} />{address}</span>
+        </li>
+        <li>
+          <span><Icon name="clock" size={18} />{hours}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="footer-copy">© {year} Окна-Сервис. Все права защищены.</p>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-5);
+    background: var(--gradient-soft);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .site-footer__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-2) var(--space-3);
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
+  }
+
+  .footer-col {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+  }
+
+  .footer-brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius);
+    background: var(--gradient-brand);
+    color: var(--color-on-brand);
+  }
+
+  .footer-tagline {
+    margin: 0;
+    max-width: 22rem;
+    color: var(--color-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .footer-heading {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text);
+  }
+
+  .footer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .footer-list a,
+  .footer-list span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+  }
+
+  .footer-list a:hover {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .footer-copy {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: var(--space-2) var(--space-2) var(--space-3);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__inner {
+      grid-template-columns: 1.4fr 1fr 1.4fr;
+    }
+  }
+</style>

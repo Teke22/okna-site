@@ -1,17 +1,23 @@
 ---
 import '../styles/theme.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
 export interface Props {
 	title?: string;
 	description?: string;
 	lang?: string;
 	image?: string;
+	/** Highlights the matching nav item in the shared header. */
+	activePage?: 'home' | 'services' | 'about' | 'contacts';
 }
 
 const {
-	title = 'Astro Basics',
-	description = 'Astro Basics — учебный сайт, созданный на фреймворке Astro.',
-	lang = 'en',
+	title = 'Окна-Сервис — пластиковые окна под ключ',
+	description = 'Производство и установка пластиковых окон в квартирах и домах. Бесплатный замер, монтаж под ключ и гарантия до 5 лет.',
+	lang = 'ru',
 	image = 'favicon.svg',
+	activePage,
 } = Astro.props;
 
 // import.meta.env.BASE_URL может не иметь завершающего слэша — нормализуем,
@@ -23,6 +29,7 @@ const withBase = (path: string) => base + (path.startsWith('/') ? path.slice(1) 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
 const socialImageURL = new URL(withBase(image), Astro.url);
 ---
+
 <!doctype html>
 <html lang={lang}>
 	<head>
@@ -50,15 +57,60 @@ const socialImageURL = new URL(withBase(image), Astro.url);
 		<meta name="twitter:image" content={socialImageURL} />
 	</head>
 	<body>
+		<a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
+
+		<Header base={base} activePage={activePage} />
+
 		<slot />
+
+		<Footer base={base} />
 	</body>
 </html>
 
 <style>
-	html,
-	body {
+	:global(html),
+	:global(body) {
 		margin: 0;
 		width: 100%;
-		height: 100%;
+		min-height: 100%;
+	}
+
+	:global(body) {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		font-family: var(--font);
+		color: var(--color-text);
+		background: var(--color-bg);
+		line-height: var(--line-height-base);
+	}
+
+	:global(a:focus-visible),
+	:global(button:focus-visible) {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
+	.skip-link {
+		position: absolute;
+		left: var(--space-2);
+		top: -3rem;
+		z-index: 30;
+		background: var(--color-brand);
+		color: var(--color-on-brand);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius);
+		text-decoration: none;
+	}
+
+	.skip-link:focus {
+		top: var(--space-2);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.skip-link {
+			transition: top var(--transition-fast);
+		}
 	}
 </style>

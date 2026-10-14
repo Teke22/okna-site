@@ -1,18 +1,23 @@
 /* ==========================================================================
    Design System - Theme Tokens (Okna-Service)
    --------------------------------------------------------------------------
-   Single source of truth for color, typography, spacing, radii and shadows.
-   Every component/page MUST use only these tokens; no hard-coded hex values
-   in component styles (see AGENTS.md -> kronk-theme-guard).
+   Single source of truth for color, typography, spacing, radii, shadows,
+   gradients and motion. Every component/page MUST use only these tokens;
+   no hard-coded hex values in component styles
+   (see AGENTS.md -> kronk-theme-guard).
 
    Naming is aligned with the tokens already shipped on the home page so the
    theme stays consistent across the whole site.
 
    Contrast checked against WCAG 2.1 AA (light theme):
-     text      #111827 on #ffffff  ~ 16.1:1  PASS
-     muted     #374151 on #ffffff  ~ 10.3:1  PASS
-     brand     #3245ff on #ffffff  ~  6.1:1  PASS (white on brand = 6.1:1)
-     brand-str #2334d6 on #ffffff  ~  8.3:1  PASS
+     text         #111827 on #ffffff  ~ 16.1:1  PASS
+     muted        #374151 on #ffffff  ~ 10.3:1  PASS
+     brand        #3245ff on #ffffff  ~  6.1:1  PASS (white on brand = 6.1:1)
+     brand-strong #2334d6 on #ffffff  ~  8.3:1  PASS
+     accent       #0f766e on #ffffff  ~  5.5:1  PASS (white on accent = 5.5:1)
+
+   Gradient tokens are composed from color tokens, so they adapt to dark theme
+   automatically without extra overrides.
    ========================================================================== */
 
 :root {
@@ -25,8 +30,12 @@
 
   --color-brand: #3245ff;         /* primary action color (CTA, links) */
   --color-brand-strong: #2334d6;  /* hover/active for brand */
+  --color-brand-deep: #1a27a8;    /* gradient end stop for brand gradients */
   --color-on-brand: #ffffff;      /* text/icons on top of brand */
   --color-focus: #3245ff;         /* visible :focus-visible outline */
+
+  --color-accent: #0f766e;        /* secondary accent (badges, highlights) */
+  --color-accent-strong: #0b5f57; /* hover/active for accent */
 
   /* ----- Typography ------------------------------------------------------ */
   --font: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
@@ -35,6 +44,7 @@
   --font-size-h1: clamp(2rem, 4vw + 1rem, 2.75rem);      /* 32-44px */
   --font-size-h2: clamp(1.5rem, 2.5vw + 1rem, 2rem);     /* 24-32px */
   --font-size-h3: 1.125rem;                              /* 18px */
+  --font-size-lead: 1.0625rem;                           /* 17px - intro paragraphs */
   --font-size-sm: 0.875rem;                              /* 14px */
 
   --font-weight-normal: 400;
@@ -51,18 +61,31 @@
   --space-3: 1.5rem;   /* 24px - card padding */
   --space-4: 2.5rem;   /* 40px - section rhythm */
   --space-5: 4rem;     /* 64px - large sections */
+  --space-6: 6rem;     /* 96px - hero / oversized sections */
 
   /* ----- Radii ----------------------------------------------------------- */
   --radius-sm: 0.25rem;  /*  4px - focus rings, small elements */
   --radius: 0.75rem;     /* 12px - buttons, cards (default) */
   --radius-lg: 1rem;     /* 16px - large blocks */
+  --radius-full: 999px;  /* pills, badges, avatars */
 
   /* ----- Shadows --------------------------------------------------------- */
   --shadow-sm: 0 1px 2px 0 rgba(17, 24, 39, 0.06), 0 1px 3px 0 rgba(17, 24, 39, 0.10);
   --shadow-md: 0 4px 6px -1px rgba(17, 24, 39, 0.08), 0 10px 20px -4px rgba(17, 24, 39, 0.12);
+  --shadow-lg: 0 12px 24px -6px rgba(17, 24, 39, 0.14), 0 24px 48px -12px rgba(17, 24, 39, 0.18);
+
+  /* ----- Gradients ------------------------------------------------------- */
+  --gradient-brand: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-deep) 100%);
+  --gradient-soft: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+
+  /* ----- Motion ---------------------------------------------------------- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
 
   /* ----- Layout ---------------------------------------------------------- */
-  --maxw: 68rem;  /* max content width */
+  --maxw: 68rem;        /* max content width */
+  --maxw-narrow: 45rem; /* long-form text pages */
+  --header-height: 4.5rem;
 }
 
 /* ==========================================================================
@@ -70,7 +93,8 @@
    Intentionally NOT tied to prefers-color-scheme, so the current light look
    is unchanged for existing visitors unless a toggle is added later.
    Contrast (AA): text #f8fafc / #0b1120 ~ 17.0:1, muted #cbd5e1 ~ 13.0:1,
-   brand #93a5ff on #0b1120 ~ 7.9:1 (dark text on brand 7.9:1).
+   brand #93a5ff on #0b1120 ~ 7.9:1 (dark text on brand 7.9:1),
+   accent #5eead4 on #0b1120 ~ 12.7:1.
    ========================================================================== */
 [data-theme='dark'] {
   --color-bg: #0b1120;
@@ -80,6 +104,9 @@
   --color-border: #1f2937;
   --color-brand: #93a5ff;
   --color-brand-strong: #7c8cff;
+  --color-brand-deep: #6f7dff;
   --color-on-brand: #0b1120;
   --color-focus: #93a5ff;
+  --color-accent: #5eead4;
+  --color-accent-strong: #2dd4bf;
 }

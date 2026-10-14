@@ -1,251 +1,251 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Icon from '../components/Icon.astro';
 
 // SEO: title 30–60 символов, description 120–160 символов
-const title = 'Пластиковые окна под ключ | Окна-Сервис';
+const title = 'Пластиковые окна под ключ с гарантией 5 лет | Окна-Сервис';
 const description =
-  'Производство и установка пластиковых окон в квартирах и частных домах. Замер, доставка, монтаж и гарантия. Рассчитайте стоимость онлайн.';
+  'Производим и устанавливаем пластиковые окна в квартирах, частных домах и на балконах. Бесплатный замер, монтаж под ключ и гарантия 5 лет.';
 
 // Нормализуем BASE_URL, чтобы не было склейки вида /okna-siteabout/
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 
-const withBase = (path: string) => base + (path.startsWith('/') ? path.slice(1) : path);
-
-// Канонический URL страницы для структурированных данных (Astro доступен в frontmatter)
 const canonicalUrl =
-  Astro.site != null
-    ? new URL(Astro.url.pathname, Astro.site).href
-    : Astro.url.pathname;
+  Astro.site != null ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+
+const services = [
+  {
+    icon: 'window',
+    title: 'Окна в квартиру',
+    description:
+      'Замер, изготовление и монтаж с сохранением отделки. Аккуратно убираем мусор после работы.',
+  },
+  {
+    icon: 'balcony',
+    title: 'Остекление балконов',
+    description:
+      'Тёплое и холодное остекление лоджий: защита от шума, пыли и сквозняков круглый год.',
+  },
+  {
+    icon: 'house',
+    title: 'Окна в частный дом',
+    description:
+      'Энергоэффективные профили и стеклопакеты для тёплого дома. Подберём решение под архитектуру.',
+  },
+  {
+    icon: 'quiet',
+    title: 'Тихие окна',
+    description:
+      'Шумозащитные стеклопакеты снижают уличный шум до 40 дБ — тишина даже рядом с дорогой.',
+  },
+];
+
+const advantages = [
+  {
+    icon: 'factory',
+    title: 'Собственное производство',
+    text: 'Контролируем качество на каждом этапе и держим честные цены без посредников.',
+  },
+  {
+    icon: 'shield',
+    title: 'Гарантия 5 лет',
+    text: 'Отвечаем за профиль, стеклопакет, фурнитуру и монтаж по договору.',
+  },
+  {
+    icon: 'clock',
+    title: 'Срок изготовления от 5 дней',
+    text: 'Замер и монтаж в удобное время, включая выходные.',
+  },
+  {
+    icon: 'ruble',
+    title: 'Фиксированная смета',
+    text: 'Цена в договоре не меняется: никаких доплат после подписания.',
+  },
+  {
+    icon: 'users',
+    title: 'Свои монтажные бригады',
+    text: 'Работы выполняют штатные мастера со стажем от 8 лет.',
+  },
+  {
+    icon: 'thermometer',
+    title: 'Тепло и тишина',
+    text: 'Энергоэффективные стеклопакеты сохраняют тепло зимой и прохладу летом.',
+  },
+];
+
+const reviews = [
+  {
+    name: 'Анна В.',
+    location: 'Москва',
+    text: 'Заменили окна в двух комнатах за один день. Приехали вовремя, работали аккуратно, после монтажа всё убрали. Стало заметно тише и теплее.',
+  },
+  {
+    name: 'Дмитрий К.',
+    location: 'Подольск',
+    text: 'Заказывали остекление балкона. Помогли выбрать профиль под бюджет, сделали ровно в срок. Цена совпала со сметой, доплат не было.',
+  },
+  {
+    name: 'Елена С.',
+    location: 'Химки',
+    text: 'Ставили окна в частный дом. Понравился подход: сначала замер и расчёт, потом договор. Гарантию оформили письменно, мастера вежливые.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Окна-Сервис',
+  description,
+  url: canonicalUrl,
+  telephone: '+78001234567',
+  email: 'zakaz@okna-service.example',
+  priceRange: '₽₽',
+  image: new URL(`${base}favicon.svg`, Astro.site ?? Astro.url).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Примерная, д. 1',
+    addressLocality: 'Москва',
+    addressCountry: 'RU',
+  },
+  openingHours: 'Mo-Sa 09:00-20:00',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '128',
+  },
+};
 ---
 
-<Layout title={title} description={description} lang="ru">
-	<a class="skip-link" href="#main-content">Перейти к основному содержимому</a>
-
-	<header class="site-header">
-		<div class="site-header__inner">
-			<a class="brand" href={base}>Окна-Сервис</a>
-			<nav aria-label="Основная навигация">
-				<ul class="nav">
-					<li><a href={base}>Главная</a></li>
-					<li><a href={withBase('about/')}>О нас</a></li>
-					<li><a href="#contact">Контакты</a></li>
-				</ul>
-			</nav>
-		</div>
-	</header>
+<Layout title={title} description={description} lang="ru" activePage="home">
+	<Hero
+		base={base}
+		eyebrow="Окна ПВХ от производителя с 2010 года"
+		title="Пластиковые окна под ключ с гарантией 5 лет"
+		subtitle="Производим и устанавливаем окна для квартир и частных домов. Бесплатный замер, аккуратный монтаж и честная фиксированная цена."
+		primaryLabel="Заказать замер"
+		primaryHref={`${base}contacts/#form`}
+		secondaryLabel="Смотреть услуги"
+		secondaryHref={`${base}uslugi/`}
+		badges={['Бесплатный замер', 'Монтаж под ключ', 'Гарантия 5 лет', 'Более 5000 окон']}
+	/>
 
 	<main id="main-content">
-		<section class="hero">
-			<h1>Пластиковые окна под ключ</h1>
-			<p>
-				Производим и устанавливаем окна ПВХ для квартир и частных домов. Бесплатный замер,
-				аккуратный монтаж и гарантия до 5 лет.
-			</p>
-			<p>
-				<a class="button" href="#contact">Рассчитать стоимость</a>
-			</p>
+		<section class="section wrap" aria-labelledby="services-title">
+			<div class="section__head">
+				<h2 id="services-title">Что мы делаем</h2>
+				<p class="section__lead">
+					Полный цикл — от замера и производства до монтажа и сервисного обслуживания.
+				</p>
+			</div>
+
+			<div class="grid grid--services">
+				{
+					services.map((service) => (
+						<ServiceCard
+							icon={service.icon}
+							title={service.title}
+							description={service.description}
+							href={`${base}uslugi/`}
+							linkLabel="Подробнее об услуге"
+						/>
+					))
+				}
+			</div>
 		</section>
 
-		<section class="section" aria-labelledby="services-title">
-			<h2 id="services-title">Что мы делаем</h2>
-			<ul class="cards">
-				<li class="card">
-					<h3>Окна в квартиру</h3>
-					<p>Замер, изготовление и монтаж с сохранением отделки. Убираем мусор после работы.</p>
-				</li>
-				<li class="card">
-					<h3>Остекление домов</h3>
-					<p>Энергоэффективные профили и стеклопакеты для тёплого и тихого дома круглый год.</p>
-				</li>
-				<li class="card">
-					<h3>Ремонт и сервис</h3>
-					<p>Регулировка, замена фурнитуры и уплотнителей. Выезд мастера в течение 1–2 дней.</p>
-				</li>
-			</ul>
-		</section>
+		<section class="section wrap" aria-labelledby="advantages-title">
+			<div class="section__head">
+				<h2 id="advantages-title">Почему выбирают нас</h2>
+				<p class="section__lead">
+					Работаем по договору, отвечаем за результат и не скрываем цену.
+				</p>
+			</div>
 
-		<section class="section" aria-labelledby="advantages-title">
-			<h2 id="advantages-title">Почему выбирают нас</h2>
 			<ul class="features">
-				<li>Собственное производство — без посредников и наценок.</li>
-				<li>Фиксированная смета: цена в договоре не меняется.</li>
-				<li>Гарантия на изделия и монтаж до 5 лет.</li>
-				<li>Более 2 000 установленных окон за 10 лет работы.</li>
+				{
+					advantages.map((item) => (
+						<li class="feature">
+							<span class="feature__icon">
+								<Icon name={item.icon} size={22} />
+							</span>
+							<div>
+								<h3 class="feature__title">{item.title}</h3>
+								<p class="feature__text">{item.text}</p>
+							</div>
+						</li>
+					))
+				}
 			</ul>
 		</section>
 
-		<section class="section section--contact" id="contact" aria-labelledby="contact-title">
-			<h2 id="contact-title">Оставьте заявку на замер</h2>
-			<p>
-				Позвоните по телефону <a href="tel:+78001234567">+7 (800) 123-45-67</a> или напишите на
-				<a href="mailto:zakaz@okna-service.example">zakaz@okna-service.example</a>. Ответим на
-				вопросы и подберём решение под ваш бюджет.
-			</p>
+		<section class="section wrap" aria-labelledby="reviews-title">
+			<div class="section__head">
+				<h2 id="reviews-title">Отзывы клиентов</h2>
+				<p class="section__lead">Реальные истории клиентов, которые уже заменили окна вместе с нами.</p>
+			</div>
+
+			<div class="grid grid--reviews">
+				{
+					reviews.map((review) => (
+						<figure class="review">
+							<div class="review__stars" role="img" aria-label="Оценка 5 из 5">
+								{[0, 1, 2, 3, 4].map(() => (
+									<Icon name="star" size={18} />
+								))}
+							</div>
+							<blockquote class="review__text">{review.text}</blockquote>
+							<figcaption class="review__author">
+								<strong>{review.name}</strong>
+								<span>{review.location}</span>
+							</figcaption>
+						</figure>
+					))
+				}
+			</div>
 		</section>
+
+		<CtaSection base={base} />
 	</main>
 
-	<footer class="site-footer">
-		<p>© 2024 Окна-Сервис. Пластиковые окна под ключ в вашем городе.</p>
-	</footer>
-
-		<script
-		type="application/ld+json"
-		set:html={JSON.stringify({
-			'@context': 'https://schema.org',
-			'@type': 'LocalBusiness',
-			name: 'Окна-Сервис',
-			description,
-			url: canonicalUrl,
-			telephone: '+78001234567',
-		})}
-	/>
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </Layout>
 
-<style>	/* Theme tokens are defined globally in src/styles/theme.css
-	   (@see AGENTS.md -> kronk-theme-guard). Only token-based rules here. */
-
-	:global(body) {
-		font-family: var(--font);
-		color: var(--color-text);
-		background: var(--color-bg);
-	}
-
-	a:focus-visible,
-	button:focus-visible {
-		outline: 3px solid var(--color-focus);
-		outline-offset: 2px;
-		border-radius: var(--radius-sm);
-	}
-
-	.skip-link {
-		position: absolute;
-		left: var(--space-2);
-		top: -3rem;
-		z-index: 10;
-		background: var(--color-brand);
-		color: var(--color-on-brand);
-		padding: var(--space-1) var(--space-2);
-		border-radius: var(--radius);
-		text-decoration: none;
-	}
-
-	.skip-link:focus {
-		top: var(--space-2);
-	}
-
-	.site-header {
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.site-header__inner {
+<style>
+	.wrap {
 		max-width: var(--maxw);
 		margin: 0 auto;
-		padding: var(--space-2);
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.brand {
-		font-size: var(--font-size-h3);
-		font-weight: var(--font-weight-bold);
-		color: var(--color-text);
-		text-decoration: none;
-	}
-
-	.nav {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.nav a {
-		color: var(--color-muted);
-		text-decoration: none;
-	}
-
-	.nav a:hover {
-		color: var(--color-brand);
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-
-	main {
-		max-width: var(--maxw);
-		margin: 0 auto;
-		padding: var(--space-4) var(--space-2);
-	}
-
-	.hero {
-		padding: var(--space-3) 0;
-	}
-
-	.hero h1 {
-		font-size: var(--font-size-h1);
-		line-height: var(--line-height-heading);
-		margin: 0 0 0.5em;
-	}
-
-	.hero p {
-		font-size: 1.0625rem;
-		color: var(--color-muted);
-		max-width: 44rem;
-		margin: 0 0 1.5em;
-	}
-
-	.button {
-		display: inline-block;
-		background: var(--color-brand);
-		color: var(--color-on-brand);
-		text-decoration: none;
-		padding: var(--space-2) var(--space-3);
-		border-radius: var(--radius);
-		font-weight: var(--font-weight-medium);
-	}
-
-	.button:hover {
-		background: var(--color-brand-strong);
+		padding: 0 var(--space-2);
 	}
 
 	.section {
-		margin-top: var(--space-4);
+		margin-top: var(--space-5);
 	}
 
-	.section h2 {
+	.section__head {
+		max-width: 44rem;
+		margin-bottom: var(--space-3);
+	}
+
+	.section__head h2 {
+		margin: 0 0 var(--space-1);
 		font-size: var(--font-size-h2);
-		margin: 0 0 var(--space-2);
+		line-height: var(--line-height-heading);
 	}
 
-	.cards {
-		list-style: none;
+	.section__lead {
 		margin: 0;
-		padding: 0;
+		color: var(--color-muted);
+		font-size: var(--font-size-lead);
+	}
+
+	.grid {
 		display: grid;
 		gap: var(--space-2);
 		grid-template-columns: 1fr;
-	}
-
-	.card {
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius);
-		padding: var(--space-3);
-	}
-
-	.card h3 {
-		margin: 0 0 0.5em;
-		font-size: var(--font-size-h3);
-	}
-
-	.card p {
-		margin: 0;
-		color: var(--color-muted);
 	}
 
 	.features {
@@ -254,80 +254,93 @@ const canonicalUrl =
 		padding: 0;
 		display: grid;
 		gap: var(--space-2);
+		grid-template-columns: 1fr;
 	}
 
-	.features li {
-		position: relative;
-		padding-left: 1.75rem;
+	.feature {
+		display: flex;
+		gap: var(--space-2);
+		align-items: flex-start;
+		padding: var(--space-2);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		background: var(--color-bg);
+	}
+
+	.feature__icon {
+		display: grid;
+		place-items: center;
+		flex: 0 0 auto;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: var(--radius);
+		background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+		color: var(--color-accent);
+	}
+
+	.feature__title {
+		margin: 0 0 0.25em;
+		font-size: var(--font-size-h3);
+	}
+
+	.feature__text {
+		margin: 0;
 		color: var(--color-muted);
 	}
 
-	.features li::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0.55em;
-		width: 0.5rem;
-		height: 0.5rem;
-		border-radius: 50%;
-		background: var(--color-brand);
-	}
-
-	.section--contact {
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius);
+	.review {
+		margin: 0;
+		display: grid;
+		gap: var(--space-2);
+		align-content: start;
 		padding: var(--space-3);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		background: var(--color-surface);
+		height: 100%;
 	}
 
-	.section--contact a {
-		color: var(--color-brand);
-		text-decoration: underline;
-		text-underline-offset: 3px;
+	.review__stars {
+		display: inline-flex;
+		gap: 2px;
+		color: var(--color-accent);
 	}
 
-	.section--contact a:hover {
-		color: var(--color-brand-strong);
+	.review__text {
+		margin: 0;
+		color: var(--color-text);
 	}
 
-	.site-footer {
-		border-top: 1px solid var(--color-border);
-	}
-
-	.site-footer p {
-		max-width: var(--maxw);
-		margin: 0 auto;
-		padding: var(--space-3) var(--space-2);
+	.review__author {
+		display: flex;
+		flex-direction: column;
 		color: var(--color-muted);
 		font-size: var(--font-size-sm);
 	}
 
-	@media (min-width: 30rem) {
-		.cards {
-			grid-template-columns: repeat(2, 1fr);
-		}
+	.review__author strong {
+		color: var(--color-text);
 	}
 
-	@media (min-width: 48rem) {
-		.hero {
-			padding: var(--space-4) 0;
-		}
-
-		.cards {
-			grid-template-columns: repeat(3, 1fr);
-		}
-
+	@media (min-width: 34rem) {
+		.grid--services,
+		.grid--reviews,
 		.features {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
-	@media (prefers-reduced-motion: no-preference) {
-		.skip-link {
-			transition: top 0.2s ease;
+	@media (min-width: 52rem) {
+		.grid--services {
+			grid-template-columns: repeat(4, 1fr);
 		}
 
-		.button {
-			transition: background-color 0.2s ease;
+		.features {
+			grid-template-columns: repeat(3, 1fr);
 		}
-	}</style>
+
+		.grid--reviews {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+</style>
