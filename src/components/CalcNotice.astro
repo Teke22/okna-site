@@ -1,0 +1,58 @@
+---
+/**
+ * CalcNotice — reusable "preliminary estimate" disclaimer for the calculator.
+ *
+ * Content is intentionally prominent but calm (soft amber surface + info icon)
+ * so users understand the figure is an estimate, not a binding quote.
+ * All styling goes through theme.css tokens — no hard-coded colours
+ * (see AGENTS.md -> kronk-theme-guard).
+ */
+import Icon from './Icon.astro';
+
+export interface Props {
+  /** Extra classes forwarded to the wrapper (e.g. grid placement). */
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['notice', className]} role="note">
+	<Icon name="info" size={20} class="notice__icon" />
+	<p class="notice__text">
+		<strong>Это предварительный расчёт.</strong> Итоговая стоимость определяется после бесплатного
+		замера и зависит от фактических размеров проёма, состояния стен, этажности, сложности монтажа и
+		выбранных материалов. Позвоните или оставьте заявку — мы приедем, замерим и назовём точную цену.
+	</p>
+</div>
+
+<style>
+	.notice {
+		display: flex;
+		gap: var(--space-2);
+		align-items: flex-start;
+		padding: var(--space-2) var(--space-3);
+		background: var(--color-warning-bg);
+		border: 1px solid var(--color-warning-border);
+		border-left-width: 4px;
+		border-radius: var(--radius);
+		color: var(--color-warning-text);
+	}
+
+	.notice :global(.notice__icon) {
+		flex: none;
+		margin-top: 0.15rem;
+		color: var(--color-warning-icon);
+	}
+
+	.notice__text {
+		margin: 0;
+		font-size: var(--font-size-sm);
+		line-height: var(--line-height-base);
+		color: var(--color-warning-text);
+	}
+
+	.notice__text strong {
+		font-weight: var(--font-weight-bold);
+	}
+</style>

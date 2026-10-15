@@ -1,34 +1,114 @@
 {
   "currency": "MDL",
-  "disclaimer": "Ориентировочные рыночные оценки (требует уточнения). Не является публичной офертой.",
+  "currencyLabel": "lei",
+  "basePricePerM2": 2000,
+  "baseNote": "Базовая цена за 1 м² готового окна стандартной конструкции: профиль Decco, фурнитура Reze, двухкамерный стеклопакет.",
+  "disclaimer": "Это предварительный расчёт. Итоговая стоимость определяется после бесплатного замера и зависит от фактических размеров проёма, состояния стен, этажности, сложности монтажа и выбранных материалов.",
   "limits": {
     "minSize": 300,
     "maxSize": 3000
   },
   "construction": {
-    "single": { "label": "Одностворчатое", "sashes": 1, "base": 0 },
-    "double": { "label": "Двухстворчатое", "sashes": 2, "base": 340 },
-    "triple": { "label": "Трёхстворчатое", "sashes": 3, "base": 680 },
-    "balcony": { "label": "Балконный блок", "sashes": 3, "base": 1360 }
+    "single": {
+      "label": "Одностворчатое окно",
+      "factor": 1.0,
+      "minWidth": 300,
+      "maxWidth": 3000,
+      "minHeight": 300,
+      "maxHeight": 3000
+    },
+    "double": {
+      "label": "Двухстворчатое окно",
+      "factor": 1.1,
+      "minWidth": 300,
+      "maxWidth": 3000,
+      "minHeight": 300,
+      "maxHeight": 3000
+    },
+    "triple": {
+      "label": "Трёхстворчатое окно",
+      "factor": 1.25,
+      "minWidth": 300,
+      "maxWidth": 3000,
+      "minHeight": 300,
+      "maxHeight": 3000
+    },
+    "balcony": {
+      "label": "Балконный блок (окно + дверь)",
+      "factor": 1.4,
+      "minWidth": 1200,
+      "maxWidth": 3000,
+      "minHeight": 1300,
+      "maxHeight": 2600
+    },
+    "balconyDoor": {
+      "label": "Балконная дверь (отдельно)",
+      "factor": 1.35,
+      "minWidth": 600,
+      "maxWidth": 1400,
+      "minHeight": 1800,
+      "maxHeight": 2400
+    },
+    "entranceDoor": {
+      "label": "Входная дверь",
+      "factor": 1.5,
+      "minWidth": 700,
+      "maxWidth": 1600,
+      "minHeight": 1800,
+      "maxHeight": 2400
+    },
+    "panoramic": {
+      "label": "Панорамное остекление",
+      "factor": 1.6,
+      "minWidth": 1000,
+      "maxWidth": 3500,
+      "minHeight": 1200,
+      "maxHeight": 3000
+    }
   },
   "profiles": {
-    "decco": { "label": "Decco (Польша)", "pricePerM2": 550 },
-    "kommerling": { "label": "KÖMMERLING (Германия)", "pricePerM2": 830 }
+    "decco": { "label": "Decco (Польша)", "factor": 1.0 },
+    "kommerling": { "label": "KÖMMERLING (Германия)", "factor": 1.5 }
   },
   "glazing": {
-    "single": { "label": "Однокамерный", "pricePerM2": 470 },
-    "double": { "label": "Двухкамерный", "pricePerM2": 680 },
-    "doubleEnergy": { "label": "Двухкамерный энергосберегающий", "pricePerM2": 830 }
+    "single": { "label": "Однокамерный", "factor": 0.85 },
+    "double": { "label": "Двухкамерный", "factor": 1.0 },
+    "doubleEnergy": { "label": "Двухкамерный энергосберегающий", "factor": 1.2 }
   },
   "hardware": {
-    "reze": { "label": "Reze (Турция)", "pricePerSash": 340 },
-    "titan": { "label": "Titan (Германия)", "pricePerSash": 550 }
+    "reze": { "label": "Reze (Турция)", "factor": 1.0 },
+    "titan": { "label": "Titan (Германия)", "factor": 1.4 }
   },
   "options": {
-    "mosquito": { "label": "Москитная сетка", "price": 420, "type": "fixed" },
-    "sill": { "label": "Подоконник", "price": 120, "type": "perMeter" },
-    "drip": { "label": "Отлив", "price": 110, "type": "perMeter" },
-    "installation": { "label": "Установка", "price": 530, "type": "perM2" },
-    "dismantling": { "label": "Демонтаж", "price": 320, "type": "fixed" }
+    "mosquito": {
+      "label": "Москитная сетка",
+      "price": 450,
+      "type": "fixed",
+      "exclude": ["entranceDoor"]
+    },
+    "sill": {
+      "label": "Подоконник",
+      "price": 350,
+      "type": "perMeter",
+      "exclude": ["entranceDoor"]
+    },
+    "drip": {
+      "label": "Отлив",
+      "price": 200,
+      "type": "perMeter",
+      "exclude": ["entranceDoor"]
+    },
+    "installation": {
+      "label": "Установка",
+      "price": 450,
+      "type": "perM2",
+      "exclude": []
+    },
+    "dismantling": {
+      "label": "Демонтаж",
+      "price": 500,
+      "type": "fixed",
+      "exclude": []
+    }
   }
 }

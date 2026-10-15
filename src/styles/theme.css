@@ -37,6 +37,12 @@
   --color-accent: #0f766e;        /* secondary accent (badges, highlights) */
   --color-accent-strong: #0b5f57; /* hover/active for accent */
 
+  /* Warning / notice surfaces (light theme, AA contrast) */
+  --color-warning-bg: #fffbeb;         /* soft amber tint */
+  --color-warning-border: #fde68a;     /* amber border */
+  --color-warning-text: #78350f;       /* #78350f on #fffbeb ~ 8.9:1 PASS */
+  --color-warning-icon: #b45309;       /* amber icon accent */
+
   /* ----- Typography ------------------------------------------------------ */
   --font: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
 
@@ -109,4 +115,8 @@
   --color-focus: #93a5ff;
   --color-accent: #5eead4;
   --color-accent-strong: #2dd4bf;
+  --color-warning-bg: #3a2f12;
+  --color-warning-border: #78591a;
+  --color-warning-text: #fde68a;
+  --color-warning-icon: #fbbf24;
 }

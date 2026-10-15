@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import CalcNotice from './CalcNotice.astro';
 import prices from '../data/prices.json';
 
 const constructionEntries = Object.entries(prices.construction);
@@ -8,9 +9,22 @@ const glazingEntries = Object.entries(prices.glazing);
 const hardwareEntries = Object.entries(prices.hardware);
 const optionEntries = Object.entries(prices.options);
 const { minSize, maxSize } = prices.limits;
+
+// Remember the first construction key so we can pre-apply its size range on load.
+const defaultConstruction = constructionEntries[0]?.[1];
+const defaultLimits = {
+	minWidth: defaultConstruction?.minWidth ?? minSize,
+	maxWidth: defaultConstruction?.maxWidth ?? maxSize,
+	minHeight: defaultConstruction?.minHeight ?? minSize,
+	maxHeight: defaultConstruction?.maxHeight ?? maxSize,
+};
 ---
 
 <div class="calculator" data-window-calculator-root>
+	<div class="calculator__notice">
+		<CalcNotice />
+	</div>
+
 	<form class="calculator__form" data-window-calculator novalidate aria-label="Калькулятор стоимости окна">
 		<fieldset class="fieldset">
 			<legend class="legend">Тип конструкции</legend>
@@ -39,15 +53,17 @@ const { minSize, maxSize } = prices.limits;
 					type="number"
 					id="calc-width"
 					name="width"
-					min={minSize}
-					max={maxSize}
+					min={defaultLimits.minWidth}
+					max={defaultLimits.maxWidth}
 					step="10"
 					inputmode="numeric"
 					placeholder="например, 1300"
 					required
 					aria-describedby="calc-width-hint calc-width-error"
 				/>
-				<p class="hint" id="calc-width-hint">От {minSize} до {maxSize} мм</p>
+				<p class="hint" id="calc-width-hint" data-width-hint>
+					От {defaultLimits.minWidth} до {defaultLimits.maxWidth} мм
+				</p>
 				<p class="error" id="calc-width-error" data-error-for="width"></p>
 			</div>
 
@@ -57,15 +73,17 @@ const { minSize, maxSize } = prices.limits;
 					type="number"
 					id="calc-height"
 					name="height"
-					min={minSize}
-					max={maxSize}
+					min={defaultLimits.minHeight}
+					max={defaultLimits.maxHeight}
 					step="10"
 					inputmode="numeric"
 					placeholder="например, 1400"
 					required
 					aria-describedby="calc-height-hint calc-height-error"
 				/>
-				<p class="hint" id="calc-height-hint">От {minSize} до {maxSize} мм</p>
+				<p class="hint" id="calc-height-hint" data-height-hint>
+					От {defaultLimits.minHeight} до {defaultLimits.maxHeight} мм
+				</p>
 				<p class="error" id="calc-height-error" data-error-for="height"></p>
 			</div>
 		</div>
@@ -97,10 +115,14 @@ const { minSize, maxSize } = prices.limits;
 
 		<fieldset class="fieldset">
 			<legend class="legend">Дополнительные опции</legend>
-			<div class="choice-grid">
+			<div class="choice-grid" data-options-grid>
 				{
 					optionEntries.map(([key, item]) => (
-						<label class="choice">
+						<label
+							class="choice"
+							data-option-choice={key}
+							data-option-exclude={(item.exclude ?? []).join(',')}
+						>
 							<input type="checkbox" name={`option-${key}`} value={key} data-option={key} />
 							<span class="choice__label">{item.label}</span>
 						</label>
@@ -133,6 +155,11 @@ const { minSize, maxSize } = prices.limits;
 			<p class="result__note">
 				Расчёт предварительный. Точную стоимость подтвердим после бесплатного замера.
 			</p>
+
+			<div class="result__notice">
+				<CalcNotice />
+			</div>
+
 			<a class="result__cta" href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}contacts/#form`}>
 				Заказать замер
 			</a>
@@ -146,6 +173,10 @@ const { minSize, maxSize } = prices.limits;
 		gap: var(--space-4);
 		grid-template-columns: 1fr;
 		align-items: start;
+	}
+
+	.calculator__notice {
+		grid-column: 1 / -1;
 	}
 
 	.calculator__form {
@@ -225,6 +256,11 @@ const { minSize, maxSize } = prices.limits;
 		padding: var(--space-1);
 		border-radius: var(--radius-sm);
 		cursor: pointer;
+	}
+
+	/* Author styles override the UA `[hidden]` rule, so re-assert it. */
+	.choice[hidden] {
+		display: none;
 	}
 
 	.choice:hover {
@@ -321,6 +357,10 @@ const { minSize, maxSize } = prices.limits;
 		color: var(--color-muted);
 	}
 
+	.result__notice {
+		margin: 0 0 var(--space-3);
+	}
+
 	.result__cta {
 		display: inline-block;
 		padding: var(--space-2) var(--space-3);
@@ -380,7 +420,13 @@ const { minSize, maxSize } = prices.limits;
 
 <script>
 	import prices from '../data/prices.json';
-	import { calculateCost, validateInput, formatMoney, formatArea } from '../scripts/calculator.js';
+	import {
+		calculateCost,
+		validateInput,
+		formatMoney,
+		formatArea,
+		getConstructionLimits,
+	} from '../scripts/calculator.js';
 
 	const form = document.querySelector<HTMLFormElement>('[data-window-calculator]');
 
@@ -391,6 +437,11 @@ const { minSize, maxSize } = prices.limits;
 		const listEl = result?.querySelector<HTMLUListElement>('[data-result-breakdown]');
 		const bodyEl = result?.querySelector<HTMLElement>('[data-result-body]');
 		const emptyEl = result?.querySelector<HTMLElement>('[data-result-empty]');
+		const widthInput = form.querySelector<HTMLInputElement>('[name="width"]');
+		const heightInput = form.querySelector<HTMLInputElement>('[name="height"]');
+		const widthHint = form.querySelector<HTMLElement>('[data-width-hint]');
+		const heightHint = form.querySelector<HTMLElement>('[data-height-hint]');
+		const optionChoices = Array.from(form.querySelectorAll<HTMLElement>('[data-option-choice]'));
 
 		const errorEls = new Map<string, HTMLElement>();
 		form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => {
@@ -401,28 +452,56 @@ const { minSize, maxSize } = prices.limits;
 		const getField = (name: string) =>
 			form.querySelector<HTMLInputElement | HTMLSelectElement>(`[name="${name}"]`);
 
+		const getConstructionKey = () =>
+			form.querySelector<HTMLInputElement>('input[name="construction"]:checked')?.value ?? '';
+
 		const readParams = () => {
-			const construction = form.querySelector<HTMLInputElement>(
-				'input[name="construction"]:checked',
-			);
 			const options: Record<string, boolean> = {};
 
 			form
 				.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-option]')
 				.forEach((checkbox) => {
 					const key = checkbox.getAttribute('data-option');
-					if (key) options[key] = checkbox.checked;
+					if (key && !checkbox.closest('[hidden]')) options[key] = checkbox.checked;
 				});
 
 			return {
 				width: getField('width')?.value ?? '',
 				height: getField('height')?.value ?? '',
-				construction: construction?.value ?? '',
+				construction: getConstructionKey(),
 				profile: getField('profile')?.value ?? '',
 				glazing: getField('glazing')?.value ?? '',
 				hardware: getField('hardware')?.value ?? '',
 				options,
 			};
+		};
+
+		/** Keep the size inputs and hints in sync with the selected construction. */
+		const syncLimits = (constructionKey: string) => {
+			const limits = getConstructionLimits(constructionKey, prices);
+			if (widthInput) {
+				widthInput.min = String(limits.minWidth);
+				widthInput.max = String(limits.maxWidth);
+			}
+			if (heightInput) {
+				heightInput.min = String(limits.minHeight);
+				heightInput.max = String(limits.maxHeight);
+			}
+			if (widthHint) widthHint.textContent = `От ${limits.minWidth} до ${limits.maxWidth} мм`;
+			if (heightHint) heightHint.textContent = `От ${limits.minHeight} до ${limits.maxHeight} мм`;
+		};
+
+		/** Hide options that make no sense for the chosen construction type. */
+		const syncOptions = (constructionKey: string) => {
+			optionChoices.forEach((label) => {
+				const exclude = (label.getAttribute('data-option-exclude') ?? '')
+					.split(',')
+					.filter(Boolean);
+				const applicable = !exclude.includes(constructionKey);
+				label.hidden = !applicable;
+				const checkbox = label.querySelector<HTMLInputElement>('input[type="checkbox"]');
+				if (checkbox && (!applicable || label.hidden)) checkbox.checked = false;
+			});
 		};
 
 		const clearErrors = () => {
@@ -475,6 +554,10 @@ const { minSize, maxSize } = prices.limits;
 		};
 
 		const update = () => {
+			const constructionKey = getConstructionKey();
+			syncLimits(constructionKey);
+			syncOptions(constructionKey);
+
 			const params = readParams();
 			const { valid, errors } = validateInput(params, prices);
 			renderErrors(errors);
@@ -486,6 +569,10 @@ const { minSize, maxSize } = prices.limits;
 
 			renderResult(calculateCost(params, prices));
 		};
+
+		// Pre-apply the range/visibility state for the default selection.
+		syncLimits(getConstructionKey());
+		syncOptions(getConstructionKey());
 
 		form.addEventListener('input', update);
 		form.addEventListener('change', update);
